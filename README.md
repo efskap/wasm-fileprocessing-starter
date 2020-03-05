@@ -1,6 +1,6 @@
 # Go WebAssembly File Processing Starter
 
-###[Demo](https://wasm-fileproc-demo.netlify.com/)
+### [Demo](https://wasm-fileproc-demo.netlify.com/)
 
 This is a starting point for an imo not-so-uncommon use of WebAssembly: having the user select a file, processing it, and then rendering a template based on the result, all inside the browser. For example, I'm working on [something like that](https://wc.dmitry.lol) for parsing Warcraft 3 replays.
 
