@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="wasm_exec.js"></script>
+    <title>Go WebAssembly File Processing Starter</title>
+</head>
+<body>
+<main>
+    <header>
+        <h1>Go WebAssembly File Processing Starter</h1>
+    </header>
+    <input id="upload" type="file">
+    <h3 id="status-text" hidden>Still initializing Wasm...</h3>
+    <div id="parsed" hidden>
+    </div>
+</main>
+<script>
+    var parseFile; // callback function to be defined by go code
+    let queuedBytes = null; // stores file data in the event of a file being selected before wasm has initialized
+
+    async function init() {
+        const go = new Go();
+        let result = await WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject);
+        await go.run(result.instance);
+    }
+
+    function onReady() {
+        if (queuedBytes) {
+            parseFile(queuedBytes);
+        }
+    }
+
+    document.getElementById('upload').addEventListener('change', function () {
+        document.getElementById("status-text").hidden = false;
+        let reader = new FileReader();
+        reader.onload = (e) => {
+            let bytes = new Uint8Array(e.target.result);
+            if (parseFile) {
+                parseFile(bytes);
+            } else {
+                queuedBytes = bytes;
+            }
+        };
+        reader.readAsArrayBuffer(this.files[0]);
+    });
+
+    init();
+</script>
+</body>
+</html>

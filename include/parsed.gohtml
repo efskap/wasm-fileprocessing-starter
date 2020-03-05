@@ -1,0 +1,13 @@
+{{- /*gotype: github.com/efskap/wasm-fileprocessing-starter.results*/ -}}
+<p>
+    File size: {{.FileSize}} bytes
+</p>
+{{ with .FirstLine }}
+    <p>It's UTF-8!</p>
+    <p>
+        First line: {{.}}
+    </p>
+{{else }}
+    <p>It is not UTF-8.</p>
+{{ end }}
+
